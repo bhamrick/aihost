@@ -2,7 +2,7 @@
 <script type="text/javascript" src="/ai/othello/pages/functions.js"></script>
 <div id="display">
 <?php
-include_once("../../globals.php");
+include_once("globals.php");
 if(isset($_GET["game"])) {
 	$result = mysql_query("SELECT * FROM othello_games WHERE ID=$_GET[game]");
 	$moves = mysql_result($result,0,"Moves");

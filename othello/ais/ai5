@@ -1,0 +1,92 @@
+#!/usr/bin/python
+import sys
+board = [
+[ 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 ],
+[ 3, 0, 0, 0, 0, 0, 0, 0, 0, 3 ],
+[ 3, 0, 0, 0, 0, 0, 0, 0, 0, 3 ],
+[ 3, 0, 0, 0, 0, 0, 0, 0, 0, 3 ],
+[ 3, 0, 0, 0, 2, 1, 0, 0, 0, 3 ],
+[ 3, 0, 0, 0, 1, 2, 0, 0, 0, 3 ],
+[ 3, 0, 0, 0, 0, 0, 0, 0, 0, 3 ],
+[ 3, 0, 0, 0, 0, 0, 0, 0, 0, 3 ],
+[ 3, 0, 0, 0, 0, 0, 0, 0, 0, 3 ],
+[ 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 ] ]
+dr = [-1,-1,-1,0,1,1,1,0]
+dc = [-1,0,1,1,1,0,-1,-1]
+
+def legal(space, player):
+        global board, dr, dc
+        r0 = space/10
+        c0 = space%10
+        if(board[r0][c0]!=0):
+                return False
+        for d in range(8):
+                good = True
+                r = r0+dr[d]
+                c = c0+dc[d]
+                if(board[r][c]!=3-player):
+                        good = False
+                else:
+                        while(board[r][c]==3-player):
+                                r+=dr[d]
+                                c+=dc[d]
+                        if(board[r][c]!=player):
+                                good=False
+                if(good):
+                        return True
+        return False
+
+def canmove(player):
+        global board
+        for space in range(100):
+                if(legal(space,player)):
+                        return True
+        return False
+
+def move(space, player):
+        global board, dr, dc
+        r0 = space/10
+        c0 = space%10
+        if(board[r0][c0]!=0):
+                return
+        for d in range(8):
+                good = True
+                r = r0+dr[d]
+                c = c0+dc[d]
+                if(board[r][c]!=3-player):
+                        good = False
+                else:
+                        while(board[r][c]==3-player):
+                                r+=dr[d]
+                                c+=dc[d]
+                        if(board[r][c]!=player):
+                                good=False
+                if(good):
+                        r-=dr[d]
+                        c-=dc[d]
+                        while(r!=r0 or c!=c0):
+                                board[r][c] = player
+                                r-=dr[d]
+                                c-=dc[d]
+        board[r0][c0] = player
+
+line = sys.stdin.readline()[:-1]
+mycolor = 2
+if(line == 'Start'):
+	mycolor = 1
+	line = '00' 
+line = int(line)
+move(line,3-mycolor)
+while(True):
+	for space in range(100):
+		if(legal(space,mycolor)):
+			move(space,mycolor)
+			print space
+			sys.stdout.flush()
+			break
+	if(canmove(3-mycolor) or (not canmove(mycolor) and not canmove(3-mycolor))):
+		line = sys.stdin.readline()[:-1]
+		if(line=='Quit'):
+			break
+		line = int(line)
+		move(line,3-mycolor)

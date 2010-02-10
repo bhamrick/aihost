@@ -66,6 +66,9 @@ function move(space, color) {
 }
 
 function forward() {
+	while(game_moves[index]==0) {
+		index++;
+	}
 	if(game_moves && index < game_moves.length) {
 		move(game_moves[index],index%2+1);
 		index++;
@@ -85,8 +88,12 @@ function backward() {
 		[ 3, 0, 0, 0, 0, 0, 0, 0, 0, 3 ],
 		[ 3, 0, 0, 0, 0, 0, 0, 0, 0, 3 ],
 		[ 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 ] ];
-		var oldindex = index;
-		for(index=0; index<oldindex-1; ) {
+		var goal = index-2;
+		while(game_moves[goal]==0) {
+			goal--;
+		}
+		goal++;
+		for(index=0; index<goal; ) {
 			forward();
 		}
 	}
